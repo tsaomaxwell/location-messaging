@@ -1,10 +1,18 @@
-import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState }  from 'react';
+import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
 
-class Chat extends Component {
-  render() {
-    return <View />;
-  }
+
+function Chat({ navigation }){
+  const [messages, setMessages] = useState([]);
+  return (
+    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <GiftedChat
+        messages={messages}
+      />
+      <Button title="Go back" onPress={() => navigation.goBack()} />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({});

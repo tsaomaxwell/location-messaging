@@ -1,12 +1,11 @@
-// Import the screens
-import Main from './components/Main';
-import Chat from './components/Chat';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import MyStack from './MyStack.js'
 // Import React Navigation
-import { createStackNavigator } from 'react-navigation'
-// Create the navigator
-const navigator = createStackNavigator({
-  Main: { screen: Main },
-  Chat: { screen: Chat },
-});
-// Export it as the root component
-export default navigator;
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MyStack />
+    </NavigationContainer>
+  );
+}
