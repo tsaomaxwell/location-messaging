@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState , useEffect}  from 'react';
 import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Fire from '../config/Fire.js';
@@ -13,14 +13,14 @@ function Chat({ navigation }){
 
   //creating a user to feed into giftedchat
   const user = {
-    name: this.props.navigation.state.params.name,//needs to be adjusted based on stuff from hacksprint session 6
+    name: "George",//needs to be adjusted based on stuff from hacksprint session 6
     _id: Fire.shared.uid,
   };
 
   //start firebase updates
   useEffect(() => {
     Fire.shared.on(message =>
-        {setMessages([messages,message]);}
+        {setMessages([message])}
     );
   }, []);
 
@@ -32,15 +32,15 @@ function Chat({ navigation }){
   }, [close]);
 
 
-
   return (
     <SafeAreaView style = {styles.background}>
       <GiftedChat
         style = {styles.chatbox}
         messages = {messages}
-        onSend={Fire.send}
+        onSend={Fire.send}//needs to be fixed
         user={user}
       />
+
       <Button title="Go back" onPress={() => {close = true; navigation.goBack();}} />
     </SafeAreaView>
   );
