@@ -1,49 +1,85 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Button, Text, TouchableOpacity, SafeAreaView} from 'react-native';
+import { 
+    SafeAreaView,
+    Keyboard,
+    TextInput,
+    Image,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    StyleSheet,
+    Text
+} from 'react-native';
+import UUID from '../utils/uuid';
 
-function Main({ navigation }) {
-  const [name, setName] = useState('');
-  return(
-    <SafeAreaView style = {styles.background}>
-        <Text style = {styles.title}>Hello, what's your name?</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeholder='type a message'
-          onChangeText={(input) => setName(input)}
-          value={name}
-        />
-        <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
-          <Text style={styles.buttonText}>
-            Go to Chat
-          </Text>
-        </TouchableOpacity>
-    </SafeAreaView>
-  );
+function HomeScreen({ navigation }) {
+    const [displayName, setDisplayName] = useState('');
+    const handlePress = () => {
+        navigation.navigate('Fireside', {
+            displayName,
+            uid: UUID()
+        });
+    }
+
+    const handleChange = (update) => {
+        if (update.length <= 20)
+            setDisplayName(update);
+    }
+
+    return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView style={styles.container}>
+                <Text style={styles.title}>Fireside Chats</Text>
+                <TextInput
+                    style={styles.nameInput}
+                    placeholder='Set Display Name'
+                    value={displayName}
+                    onChangeText={handleChange}
+                />
+                <TouchableOpacity 
+                    onPress={handlePress}
+                    style={styles.btn}
+                    disabled={displayName === ''}
+                >
+                    <Text style={{color: displayName === '' ? 'gray' : '#ffa611'}}>Start Chatting</Text>
+                </TouchableOpacity>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
+    )
 }
 
-const offset = 24;
 const styles = StyleSheet.create({
-  background: {
-    backgroundColor: '#20B2AA',
-    flex: 1,
-  },
-  title: { 
-    marginTop: offset,
-    marginLeft: offset,
-    fontSize: offset,
-  },
-  nameInput: { 
-    height: offset * 2,
-    margin: offset,
-    paddingHorizontal: offset,
-    borderColor: '#111111',
-    borderWidth: 1,
-  },
-  buttonText: {
-    marginLeft: offset,
-    fontSize: offset,
-    color: "#FFF"
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#ffcb2b',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    title: {
+        color: 'white',
+        fontSize: 50,
+        fontWeight: 'bold'
+    },
+    image: {
+        width: 300,
+        height: 300
+    }, 
+    btn: {
+        marginTop: 60,
+        paddingRight: 30,
+        paddingLeft: 30,
+        paddingTop: 15,
+        paddingBottom: 15,
+        borderRadius: 20,
+        backgroundColor: 'white'
+    },
+    nameInput: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 10,
+        minWidth: 100,
+        maxWidth: 200,
+        textAlign: 'center'
+    }
 });
 
-export default Main;
+export default HomeScreen;
