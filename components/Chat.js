@@ -41,34 +41,6 @@ function ChatScreen({ route }) {
         }
     }
 
-    const getNewMessages = async () => {
-        try {
-            // Create and execute query for latest 20 messages
-            const query = db.collection('chatroom').orderBy('timestamp', 'desc').limit(20);
-            const querySnapshot = await query.get();
-            
-            // Push each result doc's data to temporary message array
-            let messageArr = [];
-            querySnapshot.forEach((doc) => {
-                const { uid, messageText, displayName, photoURL } = doc.data();
-
-                // This is JavaScript shorthand, if the property and the variable you are using have the same name you can just use the variable name
-                messageArr.push({
-                    messageId: doc.id,
-                    uid,
-                    messageText,
-                    displayName,
-                    photoURL
-                });
-            });
-
-            // After processing all documents, set state
-            setMessages(messageArr);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const listenForUpdates = () => {
         // Listen for database changes in real time
         const query = db.collection('chatroom').limit(20).orderBy('timestamp', 'desc');
@@ -91,16 +63,9 @@ function ChatScreen({ route }) {
         });
 
         return unsubscribe;
-
-        /* Unsatisfactory implementation: gets new messages every ten seconds
-        setInterval(() => {
-            getNewMessages();
-        }, 1000 * 10); 
-        */
     }
 
     useEffect(() => {
-        // getNewMessages();
         return listenForUpdates();
     }, [])
     

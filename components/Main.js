@@ -3,7 +3,6 @@ import {
     SafeAreaView,
     Keyboard,
     TextInput,
-    Image,
     TouchableOpacity,
     TouchableWithoutFeedback,
     StyleSheet,
@@ -14,7 +13,7 @@ import UUID from '../utils/uuid';
 function HomeScreen({ navigation }) {
     const [displayName, setDisplayName] = useState('');
     const handlePress = () => {
-        navigation.navigate('Fireside', {
+        navigation.navigate('Hocus Locus', {
             displayName,
             uid: UUID()
         });
@@ -28,7 +27,7 @@ function HomeScreen({ navigation }) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView style={styles.container}>
-                <Text style={styles.title}>Fireside Chats</Text>
+                <Text style={styles.title}>Hocus Locus</Text>
                 <TextInput
                     style={styles.nameInput}
                     placeholder='Set Display Name'

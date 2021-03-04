@@ -24,10 +24,10 @@ function MyStack() {
           }}
         />
         <Stack.Screen 
-          name="Fireside"
+          name="Hocus Locus"
           component={ChatScreen}
           options={{
-            headerTitle: "Welcome to the Fireside"
+            headerTitle: "Welcome to Hocus Locus"
           }}
         />
       </Stack.Navigator>
