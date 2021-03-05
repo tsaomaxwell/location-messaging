@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
+import { getDistance, getPreciseDistance } from 'geolib';
 
 
 function ChatMessage(props) {
@@ -11,82 +12,64 @@ function ChatMessage(props) {
     } else {
         messageStyles.push(styles.received)
     }
-    const [inlocation,setinlocation] = useState(true);
-    const [location, setLocation] = useState(null);
     const [addy, setAddy] = useState("");
-    const [errorMsg, setErrorMsg] = useState(null);
+    const [message, setMessage] = useState(messageText);
+
+    useEffect(()=>{
+        var text = String(messageText);
+        if(text.includes("@@")){
+            var address = messageText.substr(messageText.indexOf("@@")+2);
+            setAddy(address);
+        }
+    },[])
   
     useEffect(() => {
       (async () => {
-        let { status } = await Location.requestPermissionsAsync();
-        if (status !== 'granted') {
-          setErrorMsg('Permission to access location was denied');
-          return;
-        }
-  
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
-
-        let messagelocation = await Location.geocodeAsync("New York, NY 10003");
-
-        try{
-            let messageaddy = await Location.reverseGeocodeAsync(messagelocation);
-            setAddy(messageaddy);
-        }
-        catch{
-            console.log("lol");
-        }
-        
-        if(messagelocation){
-            if(messagelocation.longitude!==location.coords.longitude||
-                messagelocation.latitude!==location.coords.latitude
-                ){
-                setinlocation(false);
-            }else{
-                setinlocation(true);
+        if(true){
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+                console.log('Permission to access location was denied');
+                return;
             }
-        }
+    
+            let location = await Location.getCurrentPositionAsync({});
+            let messagelocation = "x";
+            try{
+                messagelocation = await Location.geocodeAsync(addy);
+                if(messagelocation&&location&&messagelocation.length>0){
+                    const coord1 = {latitude: messagelocation[0].latitude,
+                                    longitude: messagelocation[0].longitude};
+                    const coord2 = {latitude: location.coords.latitude,
+                                longitude: location.coords.longitude};              
+                    var distanceInMeters = getDistance(coord1,coord2);
+                    if(distanceInMeters>1600){
+                        setMessage("Message at " + addy);
+                    }else{
+                        setMessage(messageText);
+                    }
+                } else {
+                    setAddy("INVALID LOCUS");
+                }
+            }
+            catch(err){
+                console.log(err);
+            }
+        }   
       })();
-    }, []);
+    }, [addy]);
 
-    let text = 'Waiting..';
-    if (errorMsg) {
-      text = errorMsg;
-    } else if (location) {
-      text = JSON.stringify(location);
-    }
-
-    if(inlocation){
-        return (
-            <View style={{alignSelf: sent ? 'flex-end' : 'flex-start', marginTop: 2, marginBottom: 2}}>
-                <View style={styles.messageWrapper}>
-
-                    <View>
-                        { !sent && <Text style={styles.nameText}>{displayName}</Text>}
-                        <View style={messageStyles}>
-                            <Text style={sent ? styles.sent : styles.received}>{messageText}</Text>
-                        </View>
+    return (
+        <View style={{alignSelf: sent ? 'flex-end' : 'flex-start', marginTop: 2, marginBottom: 2}}>
+            <View style={styles.messageWrapper}>
+                <View>
+                    { !sent && <Text style={styles.nameText}>{displayName}</Text>}
+                    <View style={messageStyles}>
+                        <Text style={sent ? styles.sent : styles.received}>{message}</Text>
                     </View>
                 </View>
             </View>
-        );
-    }
-    else{
-        return (
-            <View style={{alignSelf: sent ? 'flex-end' : 'flex-start', marginTop: 2, marginBottom: 2}}>
-                <View style={styles.messageWrapper}>
-
-                    <View>
-                        { !sent && <Text style={styles.nameText}>{displayName}</Text>}
-                        <View style={messageStyles}>
-                            <Text style={sent ? styles.sent : styles.received}>Message Available at {addy}</Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        );
-    }
-
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
