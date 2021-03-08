@@ -56,7 +56,7 @@ function HomeScreen({ navigation }) {
                     style={styles.btn}
                     disabled={displayName === ''}
                 >
-                    <Text style={{color: displayName === '' ? 'gray' : '#ffa611'}}>Start Chatting</Text>
+                    <Text style={{color: displayName === '' ? 'gray' : '#D7FBFD'}}>Start Chatting</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </TouchableWithoutFeedback>
