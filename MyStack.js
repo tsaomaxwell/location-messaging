@@ -7,13 +7,15 @@ const Stack = createStackNavigator();
 
 function MyStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator styles = {styles.navs}>
       <Stack.Screen
+        styles = {styles.navs}
         name='Main'
         component={Main}
       />
       <Stack.Screen 
         name='Chat' 
+        styles = {styles.navs}
         component={Chat} 
       />
     </Stack.Navigator>
@@ -21,3 +23,9 @@ function MyStack() {
 }
 
 export default MyStack;
+
+const styles = StyleSheet.create({
+  navs: {
+      backgroundColor: '#d1eeff'
+  },
+});

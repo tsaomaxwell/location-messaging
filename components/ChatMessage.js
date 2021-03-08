@@ -81,7 +81,7 @@ function ChatMessage(props) {
 const styles = StyleSheet.create({
     nameText: {
         marginLeft: 8,
-        color: 'gray'
+        color: 'white'
     },
     messageWrapper: {
         flexDirection: 'row',

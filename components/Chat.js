@@ -112,7 +112,7 @@ function ChatScreen({ route }) {
                             style={styles.sendBtn}
                             disabled={message === ''}
                         >
-                            <FontAwesome name="send" size={24} color={message ? "#ee6123" : 'gray'} />
+                            <FontAwesome name="send" size={24} color={message ? "white" : '#96bdd4'} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'stretch',
-        backgroundColor: '#FFF'
+        backgroundColor: '#03a1fc'
     },
     chatArea: {
         flex: 10,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     messageInput: {
         flex: 8,
         borderRadius: 20,
-        backgroundColor: '#F3F3F3',
+        backgroundColor: '#D7FBFD',
         paddingTop: 8,
         paddingBottom: 8,
         paddingRight: 10,
