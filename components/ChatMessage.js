@@ -5,7 +5,7 @@ import { getDistance, getPreciseDistance } from 'geolib';
 
 
 function ChatMessage(props) {
-    const { sent, messageText, displayName } = props;
+    const { sent, messageText, displayName, homeAddy } = props;
     const messageStyles = [styles.message];
     if (sent) {
         messageStyles.push(styles.sent);
@@ -13,13 +13,18 @@ function ChatMessage(props) {
         messageStyles.push(styles.received)
     }
     const [addy, setAddy] = useState("");
-    const [message, setMessage] = useState(messageText);
+    const [message, setMessage] = useState("Loading...");
 
     useEffect(()=>{
         var text = String(messageText);
         if(text.includes("@@")){
             var address = messageText.substr(messageText.indexOf("@@")+2);
+            if(address ==="home"){
+                address = homeAddy;
+            }
             setAddy(address);
+        }else{
+            setMessage(messageText);
         }
     },[])
   
@@ -52,6 +57,7 @@ function ChatMessage(props) {
                 }
             }
             catch(err){
+                setMessage("Invalid Location");
                 console.log(err);
             }
         }   
@@ -97,11 +103,11 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     sent: {
-        backgroundColor: '#ffa611',
+        backgroundColor: '#21ADA8',
         color: 'white'
     },
     received: {
-        backgroundColor: '#F3F3F3',
+        backgroundColor: '#D7FBFD',
         color: 'black'
     }
 });

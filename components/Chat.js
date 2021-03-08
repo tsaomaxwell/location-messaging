@@ -90,6 +90,7 @@ function ChatScreen({ route }) {
                                     displayName={item.displayName}
                                     messageText={item.messageText}
                                     photoURL={item.photoURL}
+                                    homeAddy={route.params.homeAddy}
                                 />
                             }}
                             inverted={true}

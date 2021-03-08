@@ -6,15 +6,18 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     StyleSheet,
-    Text
+    Text,
+    Image
 } from 'react-native';
 import UUID from '../utils/uuid';
 
 function HomeScreen({ navigation }) {
     const [displayName, setDisplayName] = useState('');
+    const [homeAddy, setHomeAddy] = useState('');
     const handlePress = () => {
         navigation.navigate('Hocus Locus', {
             displayName,
+            homeAddy,
             uid: UUID()
         });
     }
@@ -24,15 +27,29 @@ function HomeScreen({ navigation }) {
             setDisplayName(update);
     }
 
+    const handleAddy = (update) =>{
+        setHomeAddy(update);
+    }
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView style={styles.container}>
                 <Text style={styles.title}>Hocus Locus</Text>
+                <Image 
+                    source={require('../assets/logEugene.png')}
+                    style={styles.image}
+                />
                 <TextInput
                     style={styles.nameInput}
                     placeholder='Set Display Name'
                     value={displayName}
                     onChangeText={handleChange}
+                />
+                <TextInput
+                    style={styles.homeInput}
+                    placeholder='Set Home Address'
+                    value={homeAddy}
+                    onChangeText={handleAddy}
                 />
                 <TouchableOpacity 
                     onPress={handlePress}
@@ -49,7 +66,7 @@ function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffcb2b',
+        backgroundColor: '#21ADA8',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -77,6 +94,15 @@ const styles = StyleSheet.create({
         padding: 10,
         minWidth: 100,
         maxWidth: 200,
+        textAlign: 'center'
+    },
+    homeInput: {
+        marginTop: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 10,
+        minWidth: 200,
+        maxWidth: 600,
         textAlign: 'center'
     }
 });
