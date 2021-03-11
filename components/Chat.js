@@ -7,7 +7,9 @@ import {
     TextInput,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    StyleSheet
+    StyleSheet,
+    Image,
+    Alert
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -24,6 +26,8 @@ function ChatScreen({ route }) {
     }, []);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const [image, setImage] = useState(false);
+    var bot = (route.params.bot === 'Nun');
 
     const addNewMessage = async (uid, messageText) => {
         try { 
@@ -78,10 +82,44 @@ function ChatScreen({ route }) {
         setMessage('');
     }
 
+    function sleep(milliseconds) {
+        var start = new Date().getTime();
+        for (var i = 0; i < 1e7; i++) {
+          if ((new Date().getTime() - start) > milliseconds){
+            break;
+          }
+        }
+      }
+    
+    const [show, setShow] = useState(false);
+    const activateImage = () => {
+        if(bot === true&&image===false){
+            setImage(true);
+            Alert.alert(
+                "Get yeee away",
+                "God is watching" ,
+                [
+                    { text: "OK", onPress: () => {
+                            setShow(true);
+                            sleep(500);
+                            setShow(false);
+                        }
+                    }
+                ],
+                { cancelable: false }
+            );
+            bot = false;
+        }
+    }
+    
     return (
         <SafeAreaView style={styles.container}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.chatArea}>
+                    <View style={styles.chatArea} >
+                        {show ? (<Image 
+                            source={require('../assets/angrynun.jpg')}
+                            style={styles.image}
+                        />) : (<></>)}
                         <FlatList 
                             data={messages}
                             renderItem={({ item }) => {
@@ -91,6 +129,7 @@ function ChatScreen({ route }) {
                                     messageText={item.messageText}
                                     photoURL={item.photoURL}
                                     homeAddy={route.params.homeAddy}
+                                    callback={activateImage}
                                 />
                             }}
                             inverted={true}
@@ -106,6 +145,7 @@ function ChatScreen({ route }) {
                             style={styles.messageInput} 
                             value={message}
                             onChangeText={handleChange}
+                            multiline={true}
                         />
                         <TouchableOpacity
                             onPress={handleSend}
@@ -132,7 +172,7 @@ const styles = StyleSheet.create({
         margin: 10
     },
     inputArea: {
-        height: 40
+        minHeight: 40
     },
     inner: {
         flexDirection: 'row',
@@ -152,7 +192,11 @@ const styles = StyleSheet.create({
     },
     sendBtn: {
         padding: 5
-    }
+    },
+    image: {
+        width: 300,
+        height: 300
+    }, 
 });
 
 export default ChatScreen;

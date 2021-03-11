@@ -14,10 +14,14 @@ import UUID from '../utils/uuid';
 function HomeScreen({ navigation }) {
     const [displayName, setDisplayName] = useState('');
     const [homeAddy, setHomeAddy] = useState('');
+    const [bot, setBot] = useState('');
+    
+
     const handlePress = () => {
         navigation.navigate('Hocus Locus', {
             displayName,
             homeAddy,
+            bot,
             uid: UUID()
         });
     }
@@ -29,6 +33,10 @@ function HomeScreen({ navigation }) {
 
     const handleAddy = (update) =>{
         setHomeAddy(update);
+    }
+
+    const handleBot = (update) =>{
+        setBot(update);
     }
 
     return (
@@ -50,6 +58,12 @@ function HomeScreen({ navigation }) {
                     placeholder='Set Home Address'
                     value={homeAddy}
                     onChangeText={handleAddy}
+                />
+                <TextInput
+                    style={styles.homeInput}
+                    placeholder='Set Bot'
+                    value={bot}
+                    onChangeText={handleBot}
                 />
                 <TouchableOpacity 
                     onPress={handlePress}
@@ -86,7 +100,7 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingBottom: 15,
         borderRadius: 20,
-        backgroundColor: 'white'
+        backgroundColor: 'black'
     },
     nameInput: {
         backgroundColor: 'white',

@@ -5,7 +5,7 @@ import { getDistance, getPreciseDistance } from 'geolib';
 
 
 function ChatMessage(props) {
-    const { sent, messageText, displayName, homeAddy } = props;
+    const { sent, messageText, displayName, homeAddy, callback } = props;
     const messageStyles = [styles.message];
     if (sent) {
         messageStyles.push(styles.sent);
@@ -14,6 +14,7 @@ function ChatMessage(props) {
     }
     const [addy, setAddy] = useState("");
     const [message, setMessage] = useState("Loading...");
+    const angrynun = "655 Gayley Ave, Los Angeles, CA 90024";
 
     useEffect(()=>{
         var text = String(messageText);
@@ -30,7 +31,7 @@ function ChatMessage(props) {
   
     useEffect(() => {
       (async () => {
-        if(true){
+        if(addy!==""){
             let { status } = await Location.requestPermissionsAsync();
             if (status !== 'granted') {
                 console.log('Permission to access location was denied');
@@ -38,7 +39,8 @@ function ChatMessage(props) {
             }
     
             let location = await Location.getCurrentPositionAsync({});
-            let messagelocation = "x";
+            let messagelocation = "";
+            let nunlocation = "";
             try{
                 messagelocation = await Location.geocodeAsync(addy);
                 if(messagelocation&&location&&messagelocation.length>0){
@@ -48,12 +50,28 @@ function ChatMessage(props) {
                                 longitude: location.coords.longitude};              
                     var distanceInMeters = getDistance(coord1,coord2);
                     if(distanceInMeters>1600){
-                        setMessage("Message at " + addy);
+                        if(addy===homeAddy){
+                            setMessage("Message at " + "home");
+                        }
+                        else{
+                            setMessage("Message at " + addy);
+                        }
                     }else{
                         setMessage(messageText);
                     }
                 } else {
                     setAddy("INVALID LOCUS");
+                }
+                nunlocation = await Location.geocodeAsync(angrynun);
+                if(nunlocation&&location&&nunlocation.length>0){
+                    const coord3 = {latitude: nunlocation[0].latitude,
+                                    longitude: nunlocation[0].longitude};
+                    const coord4 = {latitude: location.coords.latitude,
+                                longitude: location.coords.longitude};              
+                    var distanceInMeters = getDistance(coord3,coord4);
+                    if(distanceInMeters<1600){
+                        callback();
+                    }
                 }
             }
             catch(err){
